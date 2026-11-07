@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Dove: proposed changes (concept mockups)</title>
+<style>
+:root{--bg:#f6f7f9;--card:#fff;--ink:#1f2937;--mute:#6b7280;--line:#e5e7eb;--brand:#2563eb;--tint:#eff6ff;--red:#dc2626;--amb:#d97706;--grn:#059669;--grey:#f3f4f6;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0f1115;--card:#181b21;--ink:#e5e7eb;--mute:#9ca3af;--line:#2a2f38;--brand:#60a5fa;--tint:#16233b;--red:#f87171;--amb:#fbbf24;--grn:#34d399;--grey:#222730}}
+:root[data-theme="dark"]{--bg:#0f1115;--card:#181b21;--ink:#e5e7eb;--mute:#9ca3af;--line:#2a2f38;--brand:#60a5fa;--tint:#16233b;--red:#f87171;--amb:#fbbf24;--grn:#34d399;--grey:#222730}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:14px/1.45 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+.wrap{max-width:720px;margin:0 auto;padding:16px}
+h1{font-size:18px;margin:4px 0}.sub{color:var(--mute);font-size:12px;margin:0 0 12px}
+.tabs{display:flex;gap:6px;overflow-x:auto;padding-bottom:8px}
+.tab{border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:999px;padding:7px 13px;font-size:13px;cursor:pointer;white-space:nowrap}
+.tab[aria-selected=true]{background:var(--brand);border-color:var(--brand);color:#fff}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px;margin-top:10px}
+.tiles{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.tile{background:var(--grey);border-radius:10px;padding:10px;text-align:center}
+.tile b{display:block;font-size:22px}.tile span{font-size:11px;color:var(--mute)}
+.row{border:1px solid var(--line);border-radius:10px;padding:10px;margin-top:8px;background:var(--card)}
+.row.done{opacity:.45;text-decoration:line-through}
+.top{display:flex;justify-content:space-between;gap:8px;align-items:flex-start}
+.t{font-weight:600}.m{font-size:12px;color:var(--mute)}
+.chip{display:inline-block;font-size:10px;font-weight:700;color:#fff;border-radius:999px;padding:2px 8px;margin-right:6px;text-transform:uppercase}
+.focus{background:var(--red)}.feed{background:var(--brand)}.noise{background:#6b7280}
+button.b{border:1px solid var(--line);background:var(--grey);color:var(--ink);border-radius:8px;padding:5px 10px;font-size:12px;cursor:pointer}
+button.p{background:var(--brand);border-color:var(--brand);color:#fff}
+.btns{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
+.note{font-size:11px;color:var(--mute);margin-top:10px}
+.why{display:none;background:var(--tint);border-radius:8px;padding:8px;margin-top:8px;font-size:12px}
+.why.open{display:block}
+.bar{height:6px;background:var(--grey);border-radius:3px;overflow:hidden}.bar i{display:block;height:100%;background:var(--brand)}
+.sw{display:flex;justify-content:space-between;align-items:center;padding:9px 0;border-bottom:1px solid var(--line)}
+.sw:last-child{border:0}
+.tg{width:42px;height:24px;border-radius:12px;background:var(--line);position:relative;border:0;cursor:pointer;flex:none}
+.tg::after{content:"";position:absolute;top:3px;left:3px;width:18px;height:18px;border-radius:50%;background:#fff;transition:.15s}
+.tg[aria-checked=true]{background:var(--grn)}.tg[aria-checked=true]::after{left:21px}
+.tg:disabled{opacity:.45;cursor:not-allowed}
+.lock{font-size:11px;color:var(--mute)}
+.toast{position:fixed;left:50%;bottom:calc(18px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:9px 14px;border-radius:10px;font-size:12px;opacity:0;pointer-events:none;transition:.2s;max-width:90%}
+.toast.on{opacity:1}
+.hide{display:none}
+</style></head>
+<body><div class="wrap">
+<h1>Dove: proposed changes</h1>
+<p class="sub">Interactive concept mockups. Fictional data, not live Dove functionality. Try the buttons and switches.</p>
+<div class="tabs" role="tablist" id="tabs"></div>
+<div id="view"></div>
+</div>
+<div class="toast" id="toast"></div>
+<script>
+var TABS=["First run","Deadline Radar","Morning brief","Privacy centre"],cur=0;
+var cats={placement:true,academic:true,events:true};
+var CATN={placement:"Placement & job mails",academic:"College & academic notices",events:"Events, clubs, newsletters"};
+var items=[
+{id:1,t:"Reliance mock test: slot booking",c:"placement",when:"Today, 6:00 PM",s:"Superset",src:"“…register before 6 PM today…”",u:"red",done:0},
+{id:2,t:"Acme Corp: SDE intern application",c:"placement",when:"Sun 8 Nov, 11:59 PM",s:"Superset",src:"“…last date to apply: 8 Nov…”",u:"red",done:0},
+{id:3,t:"Resume upload: department portal",c:"academic",when:"Mon 9 Nov, 5:00 PM",s:"Placement cell",src:"“…resumes to be submitted by Monday…”",u:"amb",done:0},
+{id:4,t:"Pre-placement talk: Globex",c:"placement",when:"Wed 11 Nov, 4:00 PM",s:"Superset",src:"“…talk will be held on 11 Nov…”",u:"brand",done:0},
+{id:5,t:"Coding club hack night",c:"events",when:"Fri 13 Nov, 7:00 PM",s:"Coding Club",src:"“…doors open at 7 PM on Friday…”",u:"brand",done:0}];
+var mails=[
+{t:"Interview invite: Recruiter",cl:"focus",why:"Contains a date and needs your confirmation."},
+{t:"Apply by Sun 11:59 PM: Placement",cl:"focus",why:"Deadline in 2 days and an action is required."},
+{t:"Weekly product newsletter",cl:"noise",why:"Promotional. No action or deadline found."},
+{t:"Flight confirmation",cl:"feed",why:"Useful information. No reply needed."}];
+var learned=8;
+function $(s){return document.querySelector(s)}
+function toast(m){var e=$("#toast");e.textContent=m;e.classList.add("on");clearTimeout(toast.t);toast.t=setTimeout(function(){e.classList.remove("on")},2200)}
+function drawTabs(){var h="";TABS.forEach(function(n,i){h+='<button class="tab" role="tab" aria-selected="'+(i==cur)+'" onclick="go('+i+')">'+n+'</button>'});$("#tabs").innerHTML=h}
+function go(i){cur=i;drawTabs();draw()}
+function vis(){return items.filter(function(x){return cats[x.c]})}
+function draw(){$("#view").innerHTML=[p1,p2,p3,p4][cur]()}
+function p1(){var h='<div class="card"><div class="bar"><i style="width:75%"></i></div><div class="m" style="text-align:right;margin-top:4px">Step 3 of 4</div><h2 style="margin:6px 0 2px;font-size:17px">Your inbox, understood</h2><div class="m">Based on your last 30 days of mail. Counts come from real analysis.</div><div class="tiles" style="margin-top:10px"><div class="tile"><b style="color:var(--red)">12</b><span>need you</span></div><div class="tile"><b>46</b><span>can wait</span></div><div class="tile"><b style="color:var(--amb)">3</b><span>deadlines found</span></div></div><div class="t" style="margin-top:12px">Why Dove sorted these this way</div>';
+mails.forEach(function(m,i){h+='<div class="row"><div class="top"><div><div class="t">'+m.t+'</div><span class="chip '+m.cl+'">'+m.cl+'</span></div><button class="b" onclick="tw('+i+')">Why?</button></div><div class="why" id="w'+i+'">'+m.why+'<div class="btns"><span class="m" style="align-self:center">Wrong?</span><button class="b" onclick="fix('+i+',\'focus\')">Focus</button><button class="b" onclick="fix('+i+',\'feed\')">Feed</button><button class="b" onclick="fix('+i+',\'noise\')">Noise</button></div></div></div>'});
+return h+'<div class="btns"><button class="b p" onclick="go(1)">Review my inbox</button><button class="b" onclick="go(3)">Adjust what matters</button></div></div>'}
+function tw(i){$("#w"+i).classList.toggle("open")}
+function fix(i,c){mails[i].cl=c;learned++;toast("Got it. Dove will remember this sender as "+c+".");draw();$("#w"+i).classList.add("open")}
+function p2(){var v=vis(),open=v.filter(function(x){return !x.done}),h='<div class="card"><div class="m">Scope: '+Object.keys(cats).filter(function(k){return cats[k]}).map(function(k){return CATN[k]}).join(", ")+' <a href="#" onclick="go(3);return false" style="color:var(--brand)">change</a></div><div class="tiles" style="margin-top:10px"><div class="tile"><b style="color:var(--red)">'+open.filter(function(x){return x.u=="red"}).length+'</b><span>due in 48 h</span></div><div class="tile"><b style="color:var(--amb)">'+open.length+'</b><span>open items</span></div><div class="tile"><b>'+(v.length-open.length)+'</b><span>done</span></div></div></div><div class="card"><div class="t">Upcoming deadlines (auto-extracted)</div>';
+if(!v.length)h+='<p class="m">No categories are switched on, so the Radar has nothing to show. Enable one in Privacy centre.</p>';
+v.forEach(function(x){h+='<div class="row'+(x.done?' done':'')+'" style="border-left:4px solid var(--'+x.u+')"><div class="t">'+x.t+'</div><div class="m">'+x.when+' · '+x.s+'</div><div class="m">Source: '+x.src+'</div><div class="btns"><button class="b" onclick="mark('+x.id+')">'+(x.done?'Undo':'Done')+'</button><button class="b" onclick="toast(\'Snoozed until tomorrow morning\')">Snooze</button><button class="b" onclick="toast(\'Opens the original mail\')">Open mail</button><button class="b" onclick="toast(\'Added to your calendar\')">Add to calendar</button></div></div>'});
+h+='</div>';
+if(cats.placement)h+='<div class="card"><div class="top"><div><div class="t">Superset · Placements</div><div class="m">14 mails grouped into one cluster</div></div><button class="b" onclick="$(\'#cl\').classList.toggle(\'hide\')">Show</button></div><div id="cl" class="hide"><div class="row"><div class="t">Infosys: shortlist update</div><div class="m">No date detected. Kept here so nothing is hidden.</div></div><div class="row"><div class="t">Globex: venue changed</div><div class="m">Updates the 11 Nov talk. New venue highlighted on the item above.</div></div></div></div>';
+return h+'<p class="note">Every date links back to the sentence it came from. Low-confidence dates would be flagged “Please verify”.</p>'}
+function mark(id){items.forEach(function(x){if(x.id==id)x.done=x.done?0:1});draw()}
+function p3(){var o=vis().filter(function(x){return !x.done}).slice(0,3),h='<div class="card"><h2 style="margin:0;font-size:17px">Good morning</h2><div class="m">Your day, simplified.</div><div class="tiles" style="margin-top:10px"><div class="tile"><b style="color:var(--red)">'+o.length+'</b><span>needs attention</span></div><div class="tile"><b style="color:var(--amb)">2</b><span>deadlines today</span></div><div class="tile"><b>4</b><span>awaiting replies</span></div></div><div class="t" style="margin-top:12px">Your top priorities</div>';
+o.forEach(function(x,i){h+='<div class="row"><div class="t">'+(i+1)+'. '+x.t+'</div><div class="m">'+x.when+' · '+x.s+'</div></div>'});
+if(!o.length)h+='<p class="m">Nothing urgent. Enjoy the quiet.</p>';
+return h+'</div><div class="card"><div class="t">Dove is learning your preferences</div><div class="m" style="margin:4px 0 6px">'+learned+' preferences learned · 90% of recent sorting accepted</div><div class="bar"><i style="width:'+Math.min(100,learned*8)+'%"></i></div><p class="note">Based on your real corrections (try the “Wrong?” buttons on the First run tab).</p></div>'}
+function p4(){var h='<div class="card"><h2 style="margin:0;font-size:17px">Privacy centre</h2><div class="m">You decide what Dove may read. Change or revoke any time.</div><div class="row" style="background:var(--tint)"><div class="t">Step 1: always on</div><div class="m">Dove reads only the sender, subject and date to decide which category a mail belongs to. No message bodies.</div></div><div class="t" style="margin-top:12px">Step 2: Dove may read the body of</div>';
+Object.keys(CATN).forEach(function(k){h+='<div class="sw"><span>'+CATN[k]+'</span><button class="tg" role="switch" aria-checked="'+cats[k]+'" aria-label="'+CATN[k]+'" onclick="sw(\''+k+'\')"></button></div>'});
+["Banking & payments","Health & insurance","Personal contacts","OTP & security codes"].forEach(function(n){h+='<div class="sw"><span>'+n+'<br><span class="lock">Never read beyond step 1</span></span><button class="tg" role="switch" aria-checked="false" disabled aria-label="'+n+'"></button></div>'});
+h+='</div><div class="card"><div class="t">What Dove keeps</div><p class="m" style="margin:4px 0">Only the extracted item (title, due date, link to the original mail). Bodies are processed and discarded, are not used to train models, and are not read by staff without your explicit permission.</p><div class="btns"><button class="b" onclick="toast(\'AI reading paused. Existing items stay visible.\')">Pause AI reading</button><button class="b" onclick="toast(\'Export is being prepared\')">Export my data</button><button class="b" onclick="toast(\'Extracted data deleted\')">Delete extracted data</button></div><p class="note">Consent is logged with date and wording shown, and withdrawing is as easy as giving it.</p></div>';return h}
+function sw(k){cats[k]=!cats[k];toast(cats[k]?"Dove may now read these mails.":"Stopped. These mails leave the Radar.");draw()}
+drawTabs();draw();
+</script></body></html>
